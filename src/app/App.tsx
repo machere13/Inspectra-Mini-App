@@ -9,7 +9,11 @@ export function App() {
   const { status } = useAuth();
 
   if (status === 'unauthenticated') {
-    return <AuthErrorPage />;
+    return (
+      <div className={styles.app}>
+        <AuthErrorPage />
+      </div>
+    );
   }
 
   return (

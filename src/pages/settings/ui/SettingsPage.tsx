@@ -22,6 +22,7 @@ import {
 } from '@features/updateProfile';
 import { useGetProfileQuery } from '@entities/profile';
 import { getThemeColor, getThemeLabel, type ThemeKey } from '@entities/theme';
+import { PageContent } from '@shared/ui';
 import styles from './SettingsPage.module.css';
 
 export function SettingsPage() {
@@ -40,7 +41,9 @@ export function SettingsPage() {
     return (
       <Panel>
         <PanelHeader>Настройки</PanelHeader>
-        <Spinner />
+        <PageContent>
+          <Spinner />
+        </PageContent>
       </Panel>
     );
   }
@@ -48,7 +51,9 @@ export function SettingsPage() {
     return (
       <Panel>
         <PanelHeader>Настройки</PanelHeader>
-        <Footer>{localError ?? (error ? 'Ошибка загрузки' : 'Нет данных')}</Footer>
+        <PageContent>
+          <Footer>{localError ?? (error ? 'Ошибка загрузки' : 'Нет данных')}</Footer>
+        </PageContent>
       </Panel>
     );
   }
@@ -93,90 +98,100 @@ export function SettingsPage() {
   return (
     <Panel>
       <PanelHeader>Настройки</PanelHeader>
+      <PageContent>
+        {localError && <Footer className={styles.errorFooter}>{localError}</Footer>}
 
-      {localError && <Footer className={styles.errorFooter}>{localError}</Footer>}
+        <Group header={<Header>Аккаунт</Header>}>
+          <SimpleCell disabled>
+            E-mail
+            <div className={styles.emailValue}>{user.email ?? '—'}</div>
+          </SimpleCell>
+          <form onSubmit={onUpdateName}>
+            <FormItem top="Имя">
+              <Input name="name" defaultValue={user.name ?? ''} placeholder="Введите имя" />
+            </FormItem>
+            <FormItem>
+              <Button type="submit" disabled={busy}>
+                Сохранить имя
+              </Button>
+            </FormItem>
+          </form>
+          <SimpleCell disabled>
+            Игровая роль
+            <div className={styles.emailValue}>{user.game_role_label ?? '—'}</div>
+          </SimpleCell>
+        </Group>
 
-      <Group header={<Header>Аккаунт</Header>}>
-        <SimpleCell disabled>
-          E-mail
-          <div className={styles.emailValue}>{user.email ?? '—'}</div>
-        </SimpleCell>
-        <form onSubmit={onUpdateName}>
-          <FormItem top="Имя">
-            <Input name="name" defaultValue={user.name ?? ''} placeholder="Введите имя" />
-          </FormItem>
+        <Group header={<Header>Тема</Header>}>
+          {themes.catalog.map(t => {
+            const isCurrent = themes.current === t.key;
+            return (
+              <Cell
+                key={t.key}
+                before={
+                  <span
+                    className={styles.themeSwatch}
+                    style={{ background: getThemeColor(t.key) }}
+                  />
+                }
+                disabled={!t.unlocked || busy}
+                onClick={t.unlocked ? () => onSelectTheme(t.key) : undefined}
+                indicator={renderThemeIndicator(isCurrent, t.unlocked)}
+                subtitle={
+                  !t.unlocked && t.unlock_via
+                    ? `Открой: ${t.unlock_via.achievement_name}`
+                    : undefined
+                }
+              >
+                {getThemeLabel(t.key)}
+              </Cell>
+            );
+          })}
+        </Group>
+
+        <Group header={<Header>Титулы</Header>}>
+          {titles.available.length === 0 && <Footer>Пока нет открытых титулов</Footer>}
+          {titles.available.map(t => (
+            <Cell
+              key={t.id}
+              onClick={() => onSelectTitle(t.id)}
+              disabled={busy}
+              indicator={
+                titles.current?.id === t.id ? (
+                  <span className={`${styles.themeIndicator} ${styles.themeIndicatorActive}`}>
+                    <Icon24CheckCircleOn />
+                  </span>
+                ) : null
+              }
+              subtitle={t.description ?? undefined}
+            >
+              {t.name}
+            </Cell>
+          ))}
+        </Group>
+
+        <Group header={<Header>Уведомления</Header>}>
+          <SimpleCell
+            after={
+              <Switch
+                checked={user.notifications_email}
+                onChange={onToggleNotify}
+                disabled={busy}
+              />
+            }
+          >
+            E-mail уведомления
+          </SimpleCell>
+        </Group>
+
+        <Group header={<Header>Сессия</Header>}>
           <FormItem>
-            <Button type="submit" disabled={busy}>
-              Сохранить имя
+            <Button mode="secondary" appearance="negative" onClick={logout}>
+              Выйти из аккаунта
             </Button>
           </FormItem>
-        </form>
-        <SimpleCell disabled>
-          Игровая роль
-          <div className={styles.emailValue}>{user.game_role_label ?? '—'}</div>
-        </SimpleCell>
-      </Group>
-
-      <Group header={<Header>Тема</Header>}>
-        {themes.catalog.map(t => {
-          const isCurrent = themes.current === t.key;
-          return (
-            <Cell
-              key={t.key}
-              before={
-                <span className={styles.themeSwatch} style={{ background: getThemeColor(t.key) }} />
-              }
-              disabled={!t.unlocked || busy}
-              onClick={t.unlocked ? () => onSelectTheme(t.key) : undefined}
-              indicator={renderThemeIndicator(isCurrent, t.unlocked)}
-              subtitle={
-                !t.unlocked && t.unlock_via ? `Открой: ${t.unlock_via.achievement_name}` : undefined
-              }
-            >
-              {getThemeLabel(t.key)}
-            </Cell>
-          );
-        })}
-      </Group>
-
-      <Group header={<Header>Титулы</Header>}>
-        {titles.available.length === 0 && <Footer>Пока нет открытых титулов</Footer>}
-        {titles.available.map(t => (
-          <Cell
-            key={t.id}
-            onClick={() => onSelectTitle(t.id)}
-            disabled={busy}
-            indicator={
-              titles.current?.id === t.id ? (
-                <span className={`${styles.themeIndicator} ${styles.themeIndicatorActive}`}>
-                  <Icon24CheckCircleOn />
-                </span>
-              ) : null
-            }
-            subtitle={t.description ?? undefined}
-          >
-            {t.name}
-          </Cell>
-        ))}
-      </Group>
-
-      <Group header={<Header>Уведомления</Header>}>
-        <SimpleCell
-          after={
-            <Switch checked={user.notifications_email} onChange={onToggleNotify} disabled={busy} />
-          }
-        >
-          E-mail уведомления
-        </SimpleCell>
-      </Group>
-
-      <Group header={<Header>Сессия</Header>}>
-        <FormItem>
-          <Button mode="secondary" appearance="negative" onClick={logout}>
-            Выйти из аккаунта
-          </Button>
-        </FormItem>
-      </Group>
+        </Group>
+      </PageContent>
     </Panel>
   );
 }

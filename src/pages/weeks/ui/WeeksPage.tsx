@@ -1,6 +1,7 @@
 import { Footer, Group, Panel, PanelHeader, SimpleCell, Spinner } from '@vkontakte/vkui';
 import { useNavigate } from 'react-router-dom';
 import { useGetWeeksQuery } from '@entities/week';
+import { PageContent } from '@shared/ui';
 
 export function WeeksPage() {
   const { data: weeks, isLoading, error } = useGetWeeksQuery();
@@ -10,7 +11,9 @@ export function WeeksPage() {
     return (
       <Panel>
         <PanelHeader>Недели</PanelHeader>
-        <Spinner />
+        <PageContent>
+          <Spinner />
+        </PageContent>
       </Panel>
     );
   }
@@ -18,7 +21,9 @@ export function WeeksPage() {
     return (
       <Panel>
         <PanelHeader>Недели</PanelHeader>
-        <Footer>{error ? 'Ошибка загрузки' : 'Нет данных'}</Footer>
+        <PageContent>
+          <Footer>{error ? 'Ошибка загрузки' : 'Нет данных'}</Footer>
+        </PageContent>
       </Panel>
     );
   }
@@ -26,18 +31,20 @@ export function WeeksPage() {
   return (
     <Panel>
       <PanelHeader>Недели</PanelHeader>
-      <Group>
-        {weeks.length === 0 && <Footer>Пока пусто</Footer>}
-        {weeks.map(w => (
-          <SimpleCell
-            key={w.id}
-            onClick={() => nav(`/weeks/${w.id}`)}
-            subtitle={w.description ?? undefined}
-          >
-            {`Неделя ${w.number} — ${w.title}`}
-          </SimpleCell>
-        ))}
-      </Group>
+      <PageContent>
+        <Group>
+          {weeks.length === 0 && <Footer>Пока пусто</Footer>}
+          {weeks.map(w => (
+            <SimpleCell
+              key={w.id}
+              onClick={() => nav(`/weeks/${w.id}`)}
+              subtitle={w.description ?? undefined}
+            >
+              {`Неделя ${w.number} — ${w.title}`}
+            </SimpleCell>
+          ))}
+        </Group>
+      </PageContent>
     </Panel>
   );
 }

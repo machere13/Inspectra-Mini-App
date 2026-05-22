@@ -9,7 +9,7 @@ import {
 } from '@vkontakte/vkui';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetArticleQuery } from '@entities/article';
-import { Markdown } from '@shared/ui';
+import { Markdown, PageContent } from '@shared/ui';
 import styles from './ArticlePage.module.css';
 
 export function ArticlePage() {
@@ -27,7 +27,9 @@ export function ArticlePage() {
     return (
       <Panel>
         <PanelHeader before={Back}>Статья</PanelHeader>
-        <Spinner />
+        <PageContent>
+          <Spinner />
+        </PageContent>
       </Panel>
     );
   }
@@ -35,7 +37,9 @@ export function ArticlePage() {
     return (
       <Panel>
         <PanelHeader before={Back}>Статья</PanelHeader>
-        <Footer>{error ? 'Ошибка загрузки' : 'Статья не найдена'}</Footer>
+        <PageContent>
+          <Footer>{error ? 'Ошибка загрузки' : 'Статья не найдена'}</Footer>
+        </PageContent>
       </Panel>
     );
   }
@@ -43,26 +47,28 @@ export function ArticlePage() {
   return (
     <Panel>
       <PanelHeader before={Back}>{data.title}</PanelHeader>
-      <Group>
-        <SimpleCell disabled multiline>
-          <div className={styles.title}>{data.title}</div>
-          {data.description && <div className={styles.description}>{data.description}</div>}
-          {data.tags && data.tags.length > 0 && (
-            <div className={styles.tags}>
-              {data.tags.map(t => (
-                <span key={t} className={styles.tag}>
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-        </SimpleCell>
-      </Group>
-      <Group>
-        <div className={styles.body}>
-          <Markdown>{data.body}</Markdown>
-        </div>
-      </Group>
+      <PageContent>
+        <Group>
+          <SimpleCell disabled multiline>
+            <div className={styles.title}>{data.title}</div>
+            {data.description && <div className={styles.description}>{data.description}</div>}
+            {data.tags && data.tags.length > 0 && (
+              <div className={styles.tags}>
+                {data.tags.map(t => (
+                  <span key={t} className={styles.tag}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </SimpleCell>
+        </Group>
+        <Group>
+          <div className={styles.body}>
+            <Markdown>{data.body}</Markdown>
+          </div>
+        </Group>
+      </PageContent>
     </Panel>
   );
 }

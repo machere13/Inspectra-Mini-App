@@ -9,6 +9,7 @@ import {
   PanelHeader,
 } from '@vkontakte/vkui';
 import { useState, type FormEvent } from 'react';
+import { PageContent } from '@shared/ui';
 import {
   useLoginOrRegisterMutation,
   useResendCodeMutation,
@@ -97,39 +98,41 @@ export function LoginForm() {
     return (
       <Panel>
         <PanelHeader>Inspectra · Вход</PanelHeader>
-        <Group header={<Header>Email и пароль</Header>}>
-          <form onSubmit={onSubmitCredentials}>
-            <FormItem top="Email">
-              <Input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                autoFocus
-              />
-            </FormItem>
-            <FormItem top="Пароль">
-              <Input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="********"
-              />
-            </FormItem>
-            <FormItem>
-              <Button
-                type="submit"
-                size="l"
-                stretched
-                disabled={loginM.isLoading || !email.trim() || !password}
-              >
-                Продолжить
-              </Button>
-            </FormItem>
-          </form>
-          <Footer>Если аккаунта нет — он создастся автоматически. Пароль придумай новый.</Footer>
-          {error && <Footer className={styles.errorFooter}>{error}</Footer>}
-        </Group>
+        <PageContent>
+          <Group header={<Header>Email и пароль</Header>}>
+            <form onSubmit={onSubmitCredentials}>
+              <FormItem top="Email">
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  autoFocus
+                />
+              </FormItem>
+              <FormItem top="Пароль">
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="********"
+                />
+              </FormItem>
+              <FormItem>
+                <Button
+                  type="submit"
+                  size="l"
+                  stretched
+                  disabled={loginM.isLoading || !email.trim() || !password}
+                >
+                  Продолжить
+                </Button>
+              </FormItem>
+            </form>
+            <Footer>Если аккаунта нет — он создастся автоматически. Пароль придумай новый.</Footer>
+            {error && <Footer className={styles.errorFooter}>{error}</Footer>}
+          </Group>
+        </PageContent>
       </Panel>
     );
   }
@@ -137,43 +140,45 @@ export function LoginForm() {
   return (
     <Panel>
       <PanelHeader>Inspectra · Подтверждение</PanelHeader>
-      <Group header={<Header>Код из письма</Header>}>
-        <form onSubmit={onSubmitCode}>
-          <FormItem top={`Код отправлен на ${email}`}>
-            <Input
-              type="text"
-              inputMode="numeric"
-              value={code}
-              onChange={e => setCode(e.target.value)}
-              placeholder="123456"
-              autoFocus
-            />
-          </FormItem>
+      <PageContent>
+        <Group header={<Header>Код из письма</Header>}>
+          <form onSubmit={onSubmitCode}>
+            <FormItem top={`Код отправлен на ${email}`}>
+              <Input
+                type="text"
+                inputMode="numeric"
+                value={code}
+                onChange={e => setCode(e.target.value)}
+                placeholder="123456"
+                autoFocus
+              />
+            </FormItem>
+            <FormItem>
+              <Button type="submit" size="l" stretched disabled={verifyM.isLoading || !code.trim()}>
+                Войти
+              </Button>
+            </FormItem>
+          </form>
           <FormItem>
-            <Button type="submit" size="l" stretched disabled={verifyM.isLoading || !code.trim()}>
-              Войти
+            <Button
+              mode="secondary"
+              size="m"
+              stretched
+              onClick={() => void onResend()}
+              disabled={resendM.isLoading}
+            >
+              Отправить код ещё раз
             </Button>
           </FormItem>
-        </form>
-        <FormItem>
-          <Button
-            mode="secondary"
-            size="m"
-            stretched
-            onClick={() => void onResend()}
-            disabled={resendM.isLoading}
-          >
-            Отправить код ещё раз
-          </Button>
-        </FormItem>
-        <FormItem>
-          <Button mode="tertiary" size="m" stretched onClick={back}>
-            Назад
-          </Button>
-        </FormItem>
-        {info && <Footer>{info}</Footer>}
-        {error && <Footer className={styles.errorFooter}>{error}</Footer>}
-      </Group>
+          <FormItem>
+            <Button mode="tertiary" size="m" stretched onClick={back}>
+              Назад
+            </Button>
+          </FormItem>
+          {info && <Footer>{info}</Footer>}
+          {error && <Footer className={styles.errorFooter}>{error}</Footer>}
+        </Group>
+      </PageContent>
     </Panel>
   );
 }

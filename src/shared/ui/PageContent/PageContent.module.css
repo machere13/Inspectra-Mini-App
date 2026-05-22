@@ -1,0 +1,14 @@
+.root {
+  max-width: 720px;
+  margin-inline: auto;
+  padding-inline: var(--spacing-x4, 16px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.root > * {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-self: stretch;
+}
