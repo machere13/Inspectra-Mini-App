@@ -10,6 +10,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetArticleQuery } from '@entities/article';
 import { Markdown } from '@shared/ui';
+import styles from './ArticlePage.module.css';
 
 export function ArticlePage() {
   const { weekId, articleId } = useParams<{ weekId: string; articleId: string }>();
@@ -44,23 +45,12 @@ export function ArticlePage() {
       <PanelHeader before={Back}>{data.title}</PanelHeader>
       <Group>
         <SimpleCell disabled multiline>
-          <div style={{ fontWeight: 600, fontSize: 18 }}>{data.title}</div>
-          {data.description && (
-            <div style={{ opacity: 0.7, marginTop: 6, fontSize: 14 }}>{data.description}</div>
-          )}
+          <div className={styles.title}>{data.title}</div>
+          {data.description && <div className={styles.description}>{data.description}</div>}
           {data.tags && data.tags.length > 0 && (
-            <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            <div className={styles.tags}>
               {data.tags.map(t => (
-                <span
-                  key={t}
-                  style={{
-                    padding: '2px 8px',
-                    background: 'var(--vkui--color_background_secondary)',
-                    color: 'var(--vkui--color_text_secondary)',
-                    borderRadius: 12,
-                    fontSize: 11,
-                  }}
-                >
+                <span key={t} className={styles.tag}>
                   {t}
                 </span>
               ))}
@@ -69,7 +59,7 @@ export function ArticlePage() {
         </SimpleCell>
       </Group>
       <Group>
-        <div style={{ padding: 16 }}>
+        <div className={styles.body}>
           <Markdown>{data.body}</Markdown>
         </div>
       </Group>

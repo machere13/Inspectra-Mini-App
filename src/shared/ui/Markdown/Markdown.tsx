@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { mdStyles } from './styles';
+import styles from './Markdown.module.css';
 
 interface MarkdownProps {
   children: string;
@@ -9,7 +9,7 @@ interface MarkdownProps {
 
 export function Markdown({ children, className }: MarkdownProps) {
   return (
-    <div className={className} style={mdStyles.root}>
+    <div className={`${styles.root}${className ? ` ${className}` : ''}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
@@ -18,7 +18,7 @@ export function Markdown({ children, className }: MarkdownProps) {
             const isBlock = /\n/.test(String(code));
             if (isBlock) {
               return (
-                <pre style={mdStyles.pre}>
+                <pre className={styles.pre}>
                   <code className={cls} {...rest}>
                     {code}
                   </code>
@@ -26,21 +26,21 @@ export function Markdown({ children, className }: MarkdownProps) {
               );
             }
             return (
-              <code style={mdStyles.codeInline} className={cls} {...rest}>
+              <code className={`${styles.codeInline}${cls ? ` ${cls}` : ''}`} {...rest}>
                 {code}
               </code>
             );
           },
-          blockquote: props => <blockquote {...props} style={mdStyles.blockquote} />,
+          blockquote: props => <blockquote {...props} className={styles.blockquote} />,
           table: props => (
-            <div style={mdStyles.tableWrap}>
-              <table {...props} style={mdStyles.table} />
+            <div className={styles.tableWrap}>
+              <table {...props} className={styles.table} />
             </div>
           ),
-          th: props => <th {...props} style={mdStyles.th} />,
-          td: props => <td {...props} style={mdStyles.td} />,
-          img: props => <img {...props} style={mdStyles.img} alt={props.alt ?? ''} />,
-          hr: () => <hr style={mdStyles.hr} />,
+          th: props => <th {...props} className={styles.th} />,
+          td: props => <td {...props} className={styles.td} />,
+          img: props => <img {...props} className={styles.img} alt={props.alt ?? ''} />,
+          hr: () => <hr className={styles.hr} />,
         }}
       >
         {children}

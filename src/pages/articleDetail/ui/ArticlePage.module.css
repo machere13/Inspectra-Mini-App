@@ -1,0 +1,29 @@
+.title {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.description {
+  opacity: 0.7;
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.tags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 2px 8px;
+  background: var(--vkui--color_background_secondary);
+  color: var(--vkui--color_text_secondary);
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+.body {
+  padding: 16px;
+}

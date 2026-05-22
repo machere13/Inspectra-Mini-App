@@ -15,6 +15,7 @@ import {
   useVerifyEmailMutation,
 } from '../api/slice';
 import { useAuth } from '../model/AuthContext';
+import styles from './LoginForm.module.css';
 
 type Step = 'credentials' | 'code';
 
@@ -127,7 +128,7 @@ export function LoginForm() {
             </FormItem>
           </form>
           <Footer>Если аккаунта нет — он создастся автоматически. Пароль придумай новый.</Footer>
-          {error && <Footer style={{ color: 'var(--vkui--color_text_negative)' }}>{error}</Footer>}
+          {error && <Footer className={styles.errorFooter}>{error}</Footer>}
         </Group>
       </Panel>
     );
@@ -171,7 +172,7 @@ export function LoginForm() {
           </Button>
         </FormItem>
         {info && <Footer>{info}</Footer>}
-        {error && <Footer style={{ color: 'var(--vkui--color_text_negative)' }}>{error}</Footer>}
+        {error && <Footer className={styles.errorFooter}>{error}</Footer>}
       </Group>
     </Panel>
   );

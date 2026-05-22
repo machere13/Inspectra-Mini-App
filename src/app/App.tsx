@@ -2,6 +2,7 @@ import { Router } from '@app/navigation';
 import { AuthErrorPage } from '@pages/authError';
 import { BottomNav } from '@widgets/bottomNav';
 import { useAuth } from '@features/auth';
+import styles from './App.module.css';
 
 export function App() {
   const { status } = useAuth();
@@ -11,7 +12,7 @@ export function App() {
   }
 
   return (
-    <div className="App">
+    <div className={styles.app}>
       <Router />
       <BottomNav />
     </div>

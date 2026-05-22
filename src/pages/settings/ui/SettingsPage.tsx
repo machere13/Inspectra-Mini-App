@@ -1,3 +1,4 @@
+import { Icon24CheckCircleOn, Icon24LockOutline } from '@vkontakte/icons';
 import {
   Button,
   Cell,
@@ -20,7 +21,8 @@ import {
   useUpdatePreferencesMutation,
 } from '@features/updateProfile';
 import { useGetProfileQuery } from '@entities/profile';
-import type { ThemeKey } from '@entities/theme';
+import { getThemeColor, getThemeLabel, type ThemeKey } from '@entities/theme';
+import styles from './SettingsPage.module.css';
 
 export function SettingsPage() {
   const { logout } = useAuth();
@@ -70,18 +72,34 @@ export function SettingsPage() {
     handle(updateName(name).unwrap());
   };
 
+  const renderThemeIndicator = (isCurrent: boolean, isUnlocked: boolean) => {
+    if (isCurrent) {
+      return (
+        <span className={`${styles.themeIndicator} ${styles.themeIndicatorActive}`}>
+          <Icon24CheckCircleOn />
+        </span>
+      );
+    }
+    if (!isUnlocked) {
+      return (
+        <span className={styles.themeIndicator}>
+          <Icon24LockOutline />
+        </span>
+      );
+    }
+    return null;
+  };
+
   return (
     <Panel>
       <PanelHeader>Настройки</PanelHeader>
 
-      {localError && (
-        <Footer style={{ color: 'var(--vkui--color_text_negative)' }}>{localError}</Footer>
-      )}
+      {localError && <Footer className={styles.errorFooter}>{localError}</Footer>}
 
       <Group header={<Header>Аккаунт</Header>}>
         <SimpleCell disabled>
           E-mail
-          <div style={{ marginLeft: 'auto', opacity: 0.7 }}>{user.email ?? '—'}</div>
+          <div className={styles.emailValue}>{user.email ?? '—'}</div>
         </SimpleCell>
         <form onSubmit={onUpdateName}>
           <FormItem top="Имя">
@@ -95,24 +113,30 @@ export function SettingsPage() {
         </form>
         <SimpleCell disabled>
           Игровая роль
-          <div style={{ marginLeft: 'auto', opacity: 0.7 }}>{user.game_role_label ?? '—'}</div>
+          <div className={styles.emailValue}>{user.game_role_label ?? '—'}</div>
         </SimpleCell>
       </Group>
 
       <Group header={<Header>Тема</Header>}>
-        {themes.catalog.map(t => (
-          <Cell
-            key={t.key}
-            disabled={!t.unlocked || busy}
-            onClick={t.unlocked ? () => onSelectTheme(t.key) : undefined}
-            indicator={themes.current === t.key ? '✓' : t.unlocked ? '' : '🔒'}
-            subtitle={
-              !t.unlocked && t.unlock_via ? `Открой: ${t.unlock_via.achievement_name}` : undefined
-            }
-          >
-            {t.key}
-          </Cell>
-        ))}
+        {themes.catalog.map(t => {
+          const isCurrent = themes.current === t.key;
+          return (
+            <Cell
+              key={t.key}
+              before={
+                <span className={styles.themeSwatch} style={{ background: getThemeColor(t.key) }} />
+              }
+              disabled={!t.unlocked || busy}
+              onClick={t.unlocked ? () => onSelectTheme(t.key) : undefined}
+              indicator={renderThemeIndicator(isCurrent, t.unlocked)}
+              subtitle={
+                !t.unlocked && t.unlock_via ? `Открой: ${t.unlock_via.achievement_name}` : undefined
+              }
+            >
+              {getThemeLabel(t.key)}
+            </Cell>
+          );
+        })}
       </Group>
 
       <Group header={<Header>Титулы</Header>}>
@@ -122,7 +146,13 @@ export function SettingsPage() {
             key={t.id}
             onClick={() => onSelectTitle(t.id)}
             disabled={busy}
-            indicator={titles.current?.id === t.id ? '✓' : ''}
+            indicator={
+              titles.current?.id === t.id ? (
+                <span className={`${styles.themeIndicator} ${styles.themeIndicatorActive}`}>
+                  <Icon24CheckCircleOn />
+                </span>
+              ) : null
+            }
             subtitle={t.description ?? undefined}
           >
             {t.name}

@@ -1,0 +1,27 @@
+.errorFooter {
+  color: var(--vkui--color_text_negative);
+}
+
+.emailValue {
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.themeSwatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--vkui--color_separator_primary);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.themeIndicator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--vkui--color_icon_secondary);
+}
+
+.themeIndicatorActive {
+  color: var(--vkui--color_icon_accent);
+}

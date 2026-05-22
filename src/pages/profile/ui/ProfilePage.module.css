@@ -1,0 +1,47 @@
+.badges {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  padding: 2px 6px;
+  background: var(--vkui--color_text_primary);
+  color: var(--vkui--color_background_content);
+  border-radius: 4px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.levelLabel {
+  margin-left: 8px;
+}
+
+.levelName {
+  margin-left: 8px;
+  opacity: 0.7;
+}
+
+.progressWrap {
+  padding: 0 16px 16px;
+}
+
+.achievementCard {
+  padding: 12px;
+}
+
+.achievementTitle {
+  font-weight: 600;
+}
+
+.achievementDescription {
+  opacity: 0.7;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.achievementStats {
+  font-size: 12px;
+}

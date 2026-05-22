@@ -11,6 +11,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetWeekArticlesQuery } from '@entities/article';
 import { useGetWeekQuery } from '@entities/week';
+import styles from './WeekDetailPage.module.css';
 
 export function WeekDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -46,8 +47,8 @@ export function WeekDetailPage() {
       <PanelHeader before={Back}>{`Неделя ${w.number}`}</PanelHeader>
       <Group>
         <SimpleCell disabled multiline>
-          <div style={{ fontWeight: 600 }}>{w.title}</div>
-          {w.description && <div style={{ opacity: 0.7, marginTop: 4 }}>{w.description}</div>}
+          <div className={styles.title}>{w.title}</div>
+          {w.description && <div className={styles.description}>{w.description}</div>}
         </SimpleCell>
       </Group>
       <Group header={<Header>Статьи</Header>}>
