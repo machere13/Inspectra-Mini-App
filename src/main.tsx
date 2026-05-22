@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import '@vkontakte/vkui/dist/vkui.css';
+import '@app/styles/index.css';
 import { App, AuthProvider } from '@app/index';
 import { store } from '@app/store';
 

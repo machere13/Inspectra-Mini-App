@@ -1,0 +1,93 @@
+:root,
+.vkui--vkBase--light,
+.vkui--vkBase--dark,
+.vkui--vkCom--light,
+.vkui--vkCom--dark,
+.vkui--vkIOS--light,
+.vkui--vkIOS--dark {
+  --vkui--color_background: var(--color-background);
+  --vkui--color_background--hover: var(--color-state-hover);
+  --vkui--color_background--active: var(--color-state-active);
+  --vkui--color_background_content: var(--color-primary);
+  --vkui--color_background_content--hover: var(--color-state-hover);
+  --vkui--color_background_content--active: var(--color-state-active);
+  --vkui--color_background_secondary: var(--color-secondary);
+  --vkui--color_background_secondary--hover: var(--color-state-hover);
+  --vkui--color_background_secondary--active: var(--color-state-active);
+  --vkui--color_background_tertiary: var(--color-tertiary);
+  --vkui--color_background_modal: var(--color-background-overlay);
+  --vkui--color_background_modal_inverse: var(--color-tertiary);
+
+  --vkui--color_background_accent: var(--color-accent);
+  --vkui--color_background_accent--hover: var(--color-accent);
+  --vkui--color_background_accent--active: var(--color-accent);
+  --vkui--color_background_accent_themed: var(--color-accent);
+  --vkui--color_background_accent_themed--hover: var(--color-accent);
+  --vkui--color_background_accent_themed--active: var(--color-accent);
+  --vkui--color_background_accent_themed_alpha: var(--color-quaternary);
+  --vkui--color_background_accent_themed_alpha--hover: var(--color-quaternary);
+  --vkui--color_background_accent_themed_alpha--active: var(--color-quaternary);
+  --vkui--color_background_accent_alternative: var(--color-accent);
+
+  --vkui--color_text_primary: var(--color-text-primary);
+  --vkui--color_text_secondary: var(--color-text-secondary);
+  --vkui--color_text_subhead: var(--color-text-secondary);
+  --vkui--color_text_tertiary: var(--color-text-tertiary);
+  --vkui--color_text_accent: var(--color-accent);
+  --vkui--color_text_accent_themed: var(--color-accent);
+  --vkui--color_text_link: var(--color-accent);
+  --vkui--color_text_link_themed: var(--color-accent);
+  --vkui--color_text_negative: var(--color-status-error);
+  --vkui--color_text_positive: var(--color-status-success);
+  --vkui--color_text_contrast: var(--color-background);
+  --vkui--color_text_contrast_themed: var(--color-background);
+
+  --vkui--color_icon_primary: var(--color-text-primary);
+  --vkui--color_icon_secondary: var(--color-text-secondary);
+  --vkui--color_icon_tertiary: var(--color-text-tertiary);
+  --vkui--color_icon_accent: var(--color-accent);
+  --vkui--color_icon_accent_themed: var(--color-accent);
+  --vkui--color_icon_positive: var(--color-status-success);
+  --vkui--color_icon_negative: var(--color-status-error);
+  --vkui--color_icon_contrast: var(--color-background);
+  --vkui--color_icon_contrast_themed: var(--color-background);
+
+  --vkui--color_separator_primary: var(--color-border-secondary);
+  --vkui--color_separator_primary--hover: var(--color-border-primary);
+  --vkui--color_separator_primary--active: var(--color-border-primary);
+  --vkui--color_separator_secondary: var(--color-border-tertiary);
+
+  --vkui--color_field_background: var(--color-secondary);
+  --vkui--color_field_border_alpha: var(--color-border-tertiary);
+
+  --vkui--color_search_field_background: var(--color-secondary);
+
+  --vkui--color_panel_header_background: var(--color-background);
+  --vkui--color_panel_header_separator: var(--color-border-tertiary);
+  --vkui--color_panel_header_icon: var(--color-text-primary);
+  --vkui--color_header_background: var(--color-background);
+
+  --vkui--color_tabbar_background: var(--color-background-overlay);
+  --vkui--color_tabbar_text_inactive: var(--color-state-text-inactive);
+
+  --vkui--color_button_primary_background: var(--color-accent);
+  --vkui--color_button_primary_background--hover: var(--color-accent);
+  --vkui--color_button_primary_background--active: var(--color-accent);
+  --vkui--color_button_primary_foreground: var(--color-background);
+  --vkui--color_button_secondary_background: var(--color-quaternary);
+  --vkui--color_button_secondary_background--hover: var(--color-state-hover);
+  --vkui--color_button_secondary_background--active: var(--color-state-active);
+  --vkui--color_button_secondary_foreground: var(--color-text-primary);
+
+  --vkui--color_accent_red: var(--color-status-error);
+  --vkui--color_accent_green: var(--color-status-success);
+  --vkui--color_accent_blue: var(--color-notification);
+
+  --vkui--color_image_border_alpha: var(--color-border-tertiary);
+
+  --vkui--font_family_base: var(--font-family-geist), 'San Francisco', 'Helvetica Neue', sans-serif;
+  --vkui--font_family_accent:
+    var(--font-family-geist), 'San Francisco', 'Helvetica Neue', sans-serif;
+  --vkui--font_family_fallbacks:
+    var(--font-family-geist), 'San Francisco', 'Helvetica Neue', sans-serif;
+}

@@ -1,0 +1,88 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-geist), 'San Francisco', 'Helvetica Neue', sans-serif;
+  font-size: var(--font-size-p-2);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root,
+#root * {
+  font-family: var(--font-family-geist), 'San Francisco', 'Helvetica Neue', sans-serif;
+}
+
+#root code,
+#root pre,
+#root .code,
+#root [class*='vkuiMarkdown'] code,
+#root [class*='Markdown_codeInline'],
+#root [class*='Markdown_pre'] {
+  font-family: var(--font-family-geist-mono), ui-monospace, Menlo, Consolas, monospace;
+}
+
+#root {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: var(--text-decoration-none);
+}
+
+a:hover {
+  text-decoration: var(--text-decoration-underline);
+}
+
+/* VKUI Cell/SimpleCell обрезают однострочный текст эллипсом (.vkuiSimpleCell__host
+   имеет white-space:nowrap). Geist шире системного → раньше влезало, теперь нет.
+   Включаем перенос на всю ширину, без эллипса. */
+.vkuiSimpleCell__host,
+.vkuiCell__host {
+  white-space: normal;
+}
+
+.vkuiSimpleCell__children,
+.vkuiSimpleCell__subtitle,
+.vkuiSimpleCell__extraSubtitle,
+.vkuiSimpleCell__overTitle,
+.vkuiSimpleCell__text {
+  text-overflow: clip;
+  overflow: visible;
+  white-space: normal;
+}
+
+.vkuiSimpleCell__indicator {
+  text-overflow: clip;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.vkuiSimpleCell__middle {
+  overflow: visible;
+}
+
+/* Footer / Headline / Subhead обычно ставят nowrap или ellipsis — отключаем. */
+[class*='vkuiFootnote'],
+[class*='vkuiSubhead'],
+[class*='vkuiHeadline'],
+[class*='vkuiCaption'],
+[class*='vkuiTitle'],
+[class*='vkuiText'],
+[class*='vkuiParagraph'] {
+  white-space: normal;
+  text-overflow: clip;
+  overflow: visible;
+}
