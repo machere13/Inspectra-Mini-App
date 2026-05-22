@@ -1,6 +1,7 @@
 export const ENDPOINTS = {
-  authVk: '/auth/vk',
-  authDev: '/auth/dev',
+  authLogin: '/auth',
+  authVerify: '/auth/verify',
+  authResend: '/auth/resend',
 
   profile: '/profile',
   profilePreferences: '/profile/preferences',
@@ -9,7 +10,8 @@ export const ENDPOINTS = {
 
   weeks: '/weeks',
   week: '/weeks/{id}',
-  weekArticles: '/weeks/{id}/articles',
+  weekArticles: '/weeks/{weekId}/articles',
+  article: '/weeks/{weekId}/articles/{id}',
 } as const;
 
 export type EndpointTemplate = (typeof ENDPOINTS)[keyof typeof ENDPOINTS];

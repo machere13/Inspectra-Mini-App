@@ -5,13 +5,8 @@ export type GameRole = 'mage' | 'warrior' | 'priest' | 'hunter' | null;
 export interface UserShort {
   id: number;
   email: string | null;
-  name: string | null;
-  vk_user_id: number | null;
-  vk_avatar_url: string | null;
   game_role: GameRole;
   game_role_required: boolean;
-  theme: ThemeKey | null;
-  experience_points: number;
 }
 
 export interface User {

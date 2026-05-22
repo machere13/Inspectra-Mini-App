@@ -1,4 +1,3 @@
-import { ScreenSpinner, Panel, View, SplitLayout, SplitCol } from '@vkontakte/vkui';
 import { Router } from '@app/navigation';
 import { AuthErrorPage } from '@pages/authError';
 import { BottomNav } from '@widgets/bottomNav';
@@ -7,21 +6,7 @@ import { useAuth } from '@features/auth';
 export function App() {
   const { status } = useAuth();
 
-  if (status === 'loading') {
-    return (
-      <SplitLayout>
-        <SplitCol>
-          <View activePanel="loading">
-            <Panel id="loading">
-              <ScreenSpinner state="loading" />
-            </Panel>
-          </View>
-        </SplitCol>
-      </SplitLayout>
-    );
-  }
-
-  if (status === 'error' || status === 'dev_login') {
+  if (status === 'unauthenticated') {
     return <AuthErrorPage />;
   }
 

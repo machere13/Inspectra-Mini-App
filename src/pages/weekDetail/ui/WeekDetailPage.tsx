@@ -53,7 +53,11 @@ export function WeekDetailPage() {
       <Group header={<Header>Статьи</Header>}>
         {list.length === 0 && <Footer>Пока пусто</Footer>}
         {list.map(a => (
-          <SimpleCell key={a.id} subtitle={a.summary ?? undefined} disabled>
+          <SimpleCell
+            key={a.id}
+            subtitle={a.description ?? undefined}
+            onClick={() => id && nav(`/weeks/${id}/articles/${a.id}`)}
+          >
             {a.title}
           </SimpleCell>
         ))}

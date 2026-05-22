@@ -1,25 +1,31 @@
 import { ENDPOINTS, baseApi } from '@shared/api';
-import type { VkLaunchParams, VkUserProfile } from '@shared/lib';
 import type { ApiSuccess } from '@shared/model';
-import type { DevLoginOpts, VkAuthResponse } from '../model/types';
+import type {
+  LoginRegisterRequest,
+  LoginRegisterResponse,
+  ResendCodeRequest,
+  VerifyEmailRequest,
+  VerifyEmailResponse,
+} from '../model/types';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: build => ({
-    vkLogin: build.mutation<
-      VkAuthResponse,
-      { launch_params: VkLaunchParams; profile: VkUserProfile }
-    >({
-      query: body => ({ url: ENDPOINTS.authVk, method: 'POST', body }),
-      transformResponse: (res: ApiSuccess<VkAuthResponse>) => res.data,
+    loginOrRegister: build.mutation<LoginRegisterResponse, LoginRegisterRequest>({
+      query: body => ({ url: ENDPOINTS.authLogin, method: 'POST', body }),
+      transformResponse: (res: ApiSuccess<LoginRegisterResponse>) => res.data,
+    }),
+    verifyEmail: build.mutation<VerifyEmailResponse, VerifyEmailRequest>({
+      query: body => ({ url: ENDPOINTS.authVerify, method: 'POST', body }),
+      transformResponse: (res: ApiSuccess<VerifyEmailResponse>) => res.data,
       invalidatesTags: ['Profile'],
     }),
-    devLogin: build.mutation<VkAuthResponse, DevLoginOpts | void>({
-      query: opts => ({ url: ENDPOINTS.authDev, method: 'POST', body: opts ?? {} }),
-      transformResponse: (res: ApiSuccess<VkAuthResponse>) => res.data,
-      invalidatesTags: ['Profile'],
+    resendCode: build.mutation<{ message?: string }, ResendCodeRequest>({
+      query: body => ({ url: ENDPOINTS.authResend, method: 'POST', body }),
+      transformResponse: (res: ApiSuccess<{ message?: string }>) => res.data,
     }),
   }),
   overrideExisting: false,
 });
 
-export const { useVkLoginMutation, useDevLoginMutation } = authApi;
+export const { useLoginOrRegisterMutation, useVerifyEmailMutation, useResendCodeMutation } =
+  authApi;

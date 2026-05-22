@@ -1,4 +1,3 @@
-import bridge from '@vkontakte/vk-bridge';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -7,8 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import '@vkontakte/vkui/dist/vkui.css';
 import { App, AuthProvider } from '@app/index';
 import { store } from '@app/store';
-
-void bridge.send('VKWebAppInit');
 
 const root = document.getElementById('root');
 if (!root) throw new Error('#root element is missing');
