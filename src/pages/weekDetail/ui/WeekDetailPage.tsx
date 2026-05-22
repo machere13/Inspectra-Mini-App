@@ -1,64 +1,58 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import {
+  Footer,
+  Group,
+  Header,
   Panel,
   PanelHeader,
   PanelHeaderBack,
-  Group,
   SimpleCell,
   Spinner,
-  Footer,
-  Header,
 } from '@vkontakte/vkui';
-import { fetchWeek, unwrapWeek, type Week } from '@entities/week';
-import { fetchArticles, unwrapArticles, type Article } from '@entities/article';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetWeekArticlesQuery } from '@entities/article';
+import { useGetWeekQuery } from '@entities/week';
 
 export function WeekDetailPage() {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
-  const [week, setWeek] = useState<Week | null>(null);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [err, setErr] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!id) return;
-    Promise.all([fetchWeek(id), fetchArticles(id)])
-      .then(([w, a]) => {
-        setWeek(unwrapWeek(w.data));
-        setArticles(unwrapArticles(a.data));
-      })
-      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Ошибка загрузки'));
-  }, [id]);
+  const week = useGetWeekQuery(id ?? '', { skip: !id });
+  const articles = useGetWeekArticlesQuery(id ?? '', { skip: !id });
 
   const Back = <PanelHeaderBack onClick={() => nav(-1)} />;
 
-  if (err)
-    return (
-      <Panel>
-        <PanelHeader before={Back}>Неделя</PanelHeader>
-        <Footer>{err}</Footer>
-      </Panel>
-    );
-  if (!week)
+  if (week.isLoading || articles.isLoading) {
     return (
       <Panel>
         <PanelHeader before={Back}>Неделя</PanelHeader>
         <Spinner />
       </Panel>
     );
+  }
+  if (week.error || !week.data) {
+    return (
+      <Panel>
+        <PanelHeader before={Back}>Неделя</PanelHeader>
+        <Footer>{week.error ? 'Ошибка загрузки' : 'Нет данных'}</Footer>
+      </Panel>
+    );
+  }
+
+  const w = week.data;
+  const list = articles.data ?? [];
 
   return (
     <Panel>
-      <PanelHeader before={Back}>{`Неделя ${week.number}`}</PanelHeader>
+      <PanelHeader before={Back}>{`Неделя ${w.number}`}</PanelHeader>
       <Group>
         <SimpleCell disabled multiline>
-          <div style={{ fontWeight: 600 }}>{week.title}</div>
-          {week.description && <div style={{ opacity: 0.7, marginTop: 4 }}>{week.description}</div>}
+          <div style={{ fontWeight: 600 }}>{w.title}</div>
+          {w.description && <div style={{ opacity: 0.7, marginTop: 4 }}>{w.description}</div>}
         </SimpleCell>
       </Group>
       <Group header={<Header>Статьи</Header>}>
-        {articles.length === 0 && <Footer>Пока пусто</Footer>}
-        {articles.map(a => (
+        {list.length === 0 && <Footer>Пока пусто</Footer>}
+        {list.map(a => (
           <SimpleCell key={a.id} subtitle={a.summary ?? undefined} disabled>
             {a.title}
           </SimpleCell>

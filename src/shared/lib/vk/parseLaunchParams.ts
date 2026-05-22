@@ -1,4 +1,4 @@
-import type { VkLaunchParams } from '@entities/user';
+import type { VkLaunchParams } from './types';
 
 export function parseLaunchParams(search: string = window.location.search): VkLaunchParams {
   const params: VkLaunchParams = {};

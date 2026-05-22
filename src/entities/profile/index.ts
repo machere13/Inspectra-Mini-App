@@ -1,2 +1,2 @@
 export type { ProfileBundle, ProgressBundle, SkillChartRow, LevelInfo } from './model/types';
-export { fetchProfile } from './api/fetchProfile';
+export { profileApi, useGetProfileQuery } from './api/slice';

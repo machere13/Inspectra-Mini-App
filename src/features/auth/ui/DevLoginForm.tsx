@@ -1,4 +1,3 @@
-import { useState, type FormEvent } from 'react';
 import {
   Panel,
   PanelHeader,
@@ -10,7 +9,8 @@ import {
   Footer,
   Spacing,
 } from '@vkontakte/vkui';
-import { useAuth } from '@app/providers';
+import { useState, type FormEvent } from 'react';
+import { useAuth } from '../model/AuthContext';
 
 const LAST_EMAIL_KEY = 'inspectra_dev_last_email';
 

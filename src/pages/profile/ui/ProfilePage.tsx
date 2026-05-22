@@ -1,46 +1,40 @@
-import { useEffect, useState } from 'react';
 import {
-  Panel,
-  PanelHeader,
-  Group,
-  Header,
   Avatar,
-  RichCell,
   Card,
   CardGrid,
-  Progress,
-  Spinner,
-  Footer,
-  SimpleCell,
   Counter,
+  Footer,
+  Group,
+  Header,
+  Panel,
+  PanelHeader,
+  Progress,
+  RichCell,
+  SimpleCell,
   Spacing,
+  Spinner,
 } from '@vkontakte/vkui';
-import { fetchProfile, type ProfileBundle } from '@entities/profile';
+import { useGetProfileQuery } from '@entities/profile';
 
 export function ProfilePage() {
-  const [data, setData] = useState<ProfileBundle | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const { data, error, isLoading } = useGetProfileQuery();
 
-  useEffect(() => {
-    fetchProfile()
-      .then(res => setData(res.data))
-      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Ошибка загрузки'));
-  }, []);
-
-  if (err)
-    return (
-      <Panel>
-        <PanelHeader>Профиль</PanelHeader>
-        <Footer>{err}</Footer>
-      </Panel>
-    );
-  if (!data)
+  if (isLoading) {
     return (
       <Panel>
         <PanelHeader>Профиль</PanelHeader>
         <Spinner />
       </Panel>
     );
+  }
+  if (error || !data) {
+    return (
+      <Panel>
+        <PanelHeader>Профиль</PanelHeader>
+        <Footer>{error ? 'Ошибка загрузки' : 'Нет данных'}</Footer>
+      </Panel>
+    );
+  }
 
   const { user, progress, skill_chart, achievements, badges } = data;
 

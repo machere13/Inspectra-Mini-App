@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProfilePage } from '@pages/profile';
-import { WeeksPage } from '@pages/weeks';
-import { WeekDetailPage } from '@pages/weekDetail';
 import { SettingsPage } from '@pages/settings';
+import { WeekDetailPage } from '@pages/weekDetail';
+import { WeeksPage } from '@pages/weeks';
 import { ROUTES } from './routes';
 
 export function Router() {

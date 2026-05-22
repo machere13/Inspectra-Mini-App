@@ -1,5 +1,3 @@
-// Базовые обёртки API-ответов (одинаковые для всех слоёв).
-
 export interface ApiSuccess<T> {
   success: true;
   data: T;

@@ -1,2 +1,2 @@
 export type { Article } from './model/types';
-export { fetchArticles, unwrapArticles } from './api/fetchArticles';
+export { articleApi, useGetWeekArticlesQuery } from './api/slice';

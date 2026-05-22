@@ -1,8 +1,8 @@
 import { ScreenSpinner, Panel, View, SplitLayout, SplitCol } from '@vkontakte/vkui';
-import { useAuth } from '@app/providers';
 import { Router } from '@app/navigation';
 import { AuthErrorPage } from '@pages/authError';
 import { BottomNav } from '@widgets/bottomNav';
+import { useAuth } from '@features/auth';
 
 export function App() {
   const { status } = useAuth();

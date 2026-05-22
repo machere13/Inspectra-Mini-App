@@ -1,5 +1,4 @@
-import { useAuth } from '@app/providers';
-import { AuthErrorPanel, DevLoginForm } from '@features/auth';
+import { useAuth, AuthErrorPanel, DevLoginForm } from '@features/auth';
 
 export function AuthErrorPage() {
   const { devMockEnabled } = useAuth();

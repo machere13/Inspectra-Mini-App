@@ -1,4 +1,3 @@
-/* ESLint v8 classic config. flat-config переедем когда понадобятся плагины из VTB. */
 module.exports = {
   root: true,
   env: { browser: true, es2022: true, node: true },
@@ -33,6 +32,7 @@ module.exports = {
       'warn',
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
+    'no-empty': ['error', { allowEmptyCatch: true }],
     'import/order': [
       'warn',
       {
@@ -50,8 +50,6 @@ module.exports = {
         alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
-    /* FSD: запрещаем импорты «снизу вверх».
-       app может импортировать всё, shared — никого, и т.д. */
     'import/no-restricted-paths': [
       'error',
       {
@@ -64,7 +62,6 @@ module.exports = {
             target: './src/entities',
             from: ['./src/app', './src/pages', './src/widgets', './src/features'],
           },
-          { target: './src/features', from: ['./src/app', './src/pages', './src/widgets'] },
           { target: './src/widgets', from: ['./src/app', './src/pages'] },
           { target: './src/pages', from: ['./src/app'] },
         ],

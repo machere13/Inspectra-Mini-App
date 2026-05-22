@@ -1,10 +1,10 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Tabbar, TabbarItem } from '@vkontakte/vkui';
 import {
   Icon28UserCircleOutline,
   Icon28NewsfeedOutline,
   Icon28SettingsOutline,
 } from '@vkontakte/icons';
+import { Tabbar, TabbarItem } from '@vkontakte/vkui';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type Tab = 'profile' | 'weeks' | 'settings';
 

@@ -1,30 +1,16 @@
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import { env } from '@shared/config';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import {
+  AuthCtx,
+  useDevLoginMutation,
+  useVkLoginMutation,
+  type AuthStatus,
+  type DevLoginOpts,
+} from '@features/auth';
+import type { UserShort } from '@entities/user';
 import { tokenStore } from '@shared/api';
-import { parseLaunchParams } from '@shared/lib';
-import type { UserShort, VkUserProfile } from '@entities/user';
-import { vkLogin, devLogin, type DevLoginOpts } from '@features/auth';
-
-type Status = 'loading' | 'ok' | 'error' | 'dev_login';
-
-interface AuthContextValue {
-  user: UserShort | null;
-  status: Status;
-  error: string | null;
-  retry: () => Promise<void>;
-  logout: () => void;
-  devMockEnabled: boolean;
-  devLogin: (opts?: DevLoginOpts) => Promise<void>;
-}
-
-const AuthCtx = createContext<AuthContextValue | null>(null);
-
-export function useAuth(): AuthContextValue {
-  const ctx = useContext(AuthCtx);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
-  return ctx;
-}
+import { env } from '@shared/config';
+import { parseLaunchParams, type VkUserProfile } from '@shared/lib';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -32,25 +18,34 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserShort | null>(null);
-  const [status, setStatus] = useState<Status>('loading');
+  const [status, setStatus] = useState<AuthStatus>('loading');
   const [error, setError] = useState<string | null>(null);
+
+  const [triggerVkLogin] = useVkLoginMutation();
+  const [triggerDevLogin] = useDevLoginMutation();
 
   const devMockEnabled = env.devMockAuth;
 
-  const runDevLogin = useCallback(async (opts: DevLoginOpts = {}) => {
-    setStatus('loading');
-    setError(null);
-    try {
-      const res = await devLogin(opts);
-      tokenStore.set(res.data.token);
-      setUser(res.data.user);
-      setStatus('ok');
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Dev login failed';
-      setStatus('dev_login');
-      setError(message);
-    }
-  }, []);
+  const runDevLogin = useCallback(
+    async (opts: DevLoginOpts = {}) => {
+      setStatus('loading');
+      setError(null);
+      try {
+        const data = await triggerDevLogin(opts).unwrap();
+        tokenStore.set(data.token);
+        setUser(data.user);
+        setStatus('ok');
+      } catch (e: unknown) {
+        const message =
+          (typeof e === 'object' && e !== null && 'data' in e
+            ? ((e as { data?: { error?: { message?: string } } }).data?.error?.message ?? null)
+            : null) ?? (e instanceof Error ? e.message : 'Dev login failed');
+        setStatus('dev_login');
+        setError(message);
+      }
+    },
+    [triggerDevLogin],
+  );
 
   const authenticate = useCallback(async () => {
     setStatus('loading');
@@ -67,16 +62,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
           last_name: userInfo.last_name,
           photo_200: userInfo.photo_200,
         };
-      } catch {
-        /* не критично */
-      }
+      } catch {}
 
       try {
-        const res = await vkLogin(launchParams, profile);
-        tokenStore.set(res.data.token);
-        setUser(res.data.user);
+        const data = await triggerVkLogin({ launch_params: launchParams, profile }).unwrap();
+        tokenStore.set(data.token);
+        setUser(data.user);
         setStatus('ok');
-      } catch (e) {
+      } catch (e: unknown) {
         const message = e instanceof Error ? e.message : 'Ошибка авторизации';
         setStatus('error');
         setError(message);
@@ -96,7 +89,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     setStatus('error');
     setError('Запусти из VK Mini App');
-  }, [devMockEnabled]);
+  }, [devMockEnabled, triggerVkLogin]);
 
   useEffect(() => {
     void authenticate();

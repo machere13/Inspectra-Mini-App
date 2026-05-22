@@ -1,5 +1,5 @@
 import { Panel, PanelHeader, Group, Placeholder, Button } from '@vkontakte/vkui';
-import { useAuth } from '@app/providers';
+import { useAuth } from '../model/AuthContext';
 
 export function AuthErrorPanel() {
   const { error, retry } = useAuth();

@@ -1,6 +1,3 @@
-// Все URL'ы API в одном месте. {param} — динамические сегменты,
-// подставляются через injectDynamicSegments.
-
 export const ENDPOINTS = {
   authVk: '/auth/vk',
   authDev: '/auth/dev',

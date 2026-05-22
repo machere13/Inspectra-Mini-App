@@ -1,1 +1,2 @@
-export { parseLaunchParams } from './parseLaunchParams';
+export { parseLaunchParams } from './vk/parseLaunchParams';
+export type { VkLaunchParams, VkUserProfile } from './vk/types';

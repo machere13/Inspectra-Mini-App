@@ -1,1 +1,6 @@
-export { updatePreferences, selectTitle, updateName } from './api';
+export {
+  updateProfileApi,
+  useUpdatePreferencesMutation,
+  useSelectTitleMutation,
+  useUpdateNameMutation,
+} from './api/slice';

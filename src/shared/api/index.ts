@@ -1,4 +1,3 @@
-export { http, type RequestOptions } from './client';
+export { baseApi } from './baseApi';
 export { tokenStore } from './tokenStore';
-export { HttpError } from './httpError';
 export { ENDPOINTS, injectDynamicSegments } from './endpoints';

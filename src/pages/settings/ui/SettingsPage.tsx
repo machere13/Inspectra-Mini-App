@@ -1,85 +1,82 @@
-import { useEffect, useState, type FormEvent } from 'react';
 import {
-  Panel,
-  PanelHeader,
+  Button,
+  Cell,
+  FormItem,
+  Footer,
   Group,
   Header,
-  Cell,
+  Input,
+  Panel,
+  PanelHeader,
+  SimpleCell,
   Spinner,
   Switch,
-  Footer,
-  Button,
-  SimpleCell,
-  FormItem,
-  Input,
 } from '@vkontakte/vkui';
-import { useAuth } from '@app/providers';
-import { fetchProfile, type ProfileBundle } from '@entities/profile';
+import { useState, type FormEvent } from 'react';
+import { useAuth } from '@features/auth';
+import {
+  useSelectTitleMutation,
+  useUpdateNameMutation,
+  useUpdatePreferencesMutation,
+} from '@features/updateProfile';
+import { useGetProfileQuery } from '@entities/profile';
 import type { ThemeKey } from '@entities/theme';
-import { updatePreferences, selectTitle, updateName } from '@features/updateProfile';
 
 export function SettingsPage() {
   const { logout } = useAuth();
-  const [data, setData] = useState<ProfileBundle | null>(null);
-  const [err, setErr] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
+  const { data, isLoading, error } = useGetProfileQuery();
 
-  const reload = async () => {
-    try {
-      const res = await fetchProfile();
-      setData(res.data);
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Ошибка загрузки');
-    }
-  };
+  const [updatePreferences, prefsM] = useUpdatePreferencesMutation();
+  const [selectTitle, titleM] = useSelectTitleMutation();
+  const [updateName, nameM] = useUpdateNameMutation();
 
-  useEffect(() => {
-    void reload();
-  }, []);
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  const handle = async (fn: () => Promise<unknown>) => {
-    setBusy(true);
-    try {
-      await fn();
-      await reload();
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : 'Ошибка');
-    } finally {
-      setBusy(false);
-    }
-  };
+  const busy = prefsM.isLoading || titleM.isLoading || nameM.isLoading;
 
-  if (err)
-    return (
-      <Panel>
-        <PanelHeader>Настройки</PanelHeader>
-        <Footer>{err}</Footer>
-      </Panel>
-    );
-  if (!data)
+  if (isLoading) {
     return (
       <Panel>
         <PanelHeader>Настройки</PanelHeader>
         <Spinner />
       </Panel>
     );
+  }
+  if (error || !data) {
+    return (
+      <Panel>
+        <PanelHeader>Настройки</PanelHeader>
+        <Footer>{localError ?? (error ? 'Ошибка загрузки' : 'Нет данных')}</Footer>
+      </Panel>
+    );
+  }
 
   const { user, themes, titles } = data;
 
-  const onSelectTheme = (k: ThemeKey) => handle(() => updatePreferences({ theme: k }));
+  const handle = (p: Promise<unknown>) => {
+    p.catch((e: unknown) => {
+      setLocalError(e instanceof Error ? e.message : 'Ошибка');
+    });
+  };
+
+  const onSelectTheme = (k: ThemeKey) => handle(updatePreferences({ theme: k }).unwrap());
   const onToggleNotify = () =>
-    handle(() => updatePreferences({ notifications_email: !user.notifications_email }));
-  const onSelectTitle = (id: number) => handle(() => selectTitle(id));
+    handle(updatePreferences({ notifications_email: !user.notifications_email }).unwrap());
+  const onSelectTitle = (id: number) => handle(selectTitle(id).unwrap());
 
   const onUpdateName = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const name = (new FormData(e.currentTarget).get('name') as string | null) ?? '';
-    void handle(() => updateName(name));
+    handle(updateName(name).unwrap());
   };
 
   return (
     <Panel>
       <PanelHeader>Настройки</PanelHeader>
+
+      {localError && (
+        <Footer style={{ color: 'var(--vkui--color_text_negative)' }}>{localError}</Footer>
+      )}
 
       <Group header={<Header>Аккаунт</Header>}>
         <SimpleCell disabled>

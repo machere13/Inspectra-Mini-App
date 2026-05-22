@@ -1,33 +1,27 @@
-import { useEffect, useState } from 'react';
+import { Footer, Group, Panel, PanelHeader, SimpleCell, Spinner } from '@vkontakte/vkui';
 import { useNavigate } from 'react-router-dom';
-import { Panel, PanelHeader, Group, SimpleCell, Spinner, Footer } from '@vkontakte/vkui';
-import { fetchWeeks, unwrapWeeks, type Week } from '@entities/week';
+import { useGetWeeksQuery } from '@entities/week';
 
 export function WeeksPage() {
-  const [weeks, setWeeks] = useState<Week[] | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const { data: weeks, isLoading, error } = useGetWeeksQuery();
   const nav = useNavigate();
 
-  useEffect(() => {
-    fetchWeeks()
-      .then(r => setWeeks(unwrapWeeks(r.data)))
-      .catch((e: unknown) => setErr(e instanceof Error ? e.message : 'Ошибка загрузки'));
-  }, []);
-
-  if (err)
-    return (
-      <Panel>
-        <PanelHeader>Недели</PanelHeader>
-        <Footer>{err}</Footer>
-      </Panel>
-    );
-  if (!weeks)
+  if (isLoading) {
     return (
       <Panel>
         <PanelHeader>Недели</PanelHeader>
         <Spinner />
       </Panel>
     );
+  }
+  if (error || !weeks) {
+    return (
+      <Panel>
+        <PanelHeader>Недели</PanelHeader>
+        <Footer>{error ? 'Ошибка загрузки' : 'Нет данных'}</Footer>
+      </Panel>
+    );
+  }
 
   return (
     <Panel>

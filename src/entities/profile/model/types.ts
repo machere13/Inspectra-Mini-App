@@ -1,7 +1,7 @@
-import type { User } from '@entities/user';
-import type { ThemesBundle } from '@entities/theme';
-import type { TitlesBundle } from '@entities/title';
-import type { AchievementGroup, Badge } from '@entities/achievement';
+import type { AchievementGroup, Badge } from '@entities/achievement/@x/profile';
+import type { ThemesBundle } from '@entities/theme/@x/profile';
+import type { TitlesBundle } from '@entities/title/@x/profile';
+import type { User } from '@entities/user/@x/profile';
 
 export interface LevelInfo {
   number: number;
