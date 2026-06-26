@@ -1,25 +1,28 @@
-import type { ThemeKey } from '@entities/theme/@x/user';
+import { z } from 'zod';
+import { themeKeySchema } from '@entities/theme/@x/user';
 
-export type GameRole = 'mage' | 'warrior' | 'priest' | 'hunter' | null;
+export const gameRoleSchema = z.enum(['mage', 'warrior', 'priest', 'hunter']).nullable();
 
-export interface UserShort {
-  id: number;
-  email: string | null;
-  game_role: GameRole;
-  game_role_required: boolean;
-}
+export const userShortSchema = z.object({
+  id: z.number(),
+  email: z.string().nullable(),
+  game_role: gameRoleSchema,
+  game_role_required: z.boolean(),
+});
 
-export interface User {
-  id: number;
-  email: string | null;
-  name: string | null;
-  vk_user_id: number | null;
-  vk_avatar_url: string | null;
-  avatar_url: string | null;
-  game_role: GameRole;
-  game_role_label: string | null;
-  game_role_required: boolean;
-  theme: ThemeKey;
-  notifications_email: boolean;
-  experience_points: number;
-}
+export const userSchema = z.object({
+  id: z.number(),
+  email: z.string().nullable(),
+  name: z.string().nullable(),
+  avatar_url: z.string().nullable(),
+  game_role: gameRoleSchema,
+  game_role_label: z.string().nullable(),
+  game_role_required: z.boolean(),
+  theme: themeKeySchema,
+  notifications_email: z.boolean(),
+  experience_points: z.number(),
+});
+
+export type GameRole = z.infer<typeof gameRoleSchema>;
+export type UserShort = z.infer<typeof userShortSchema>;
+export type User = z.infer<typeof userSchema>;

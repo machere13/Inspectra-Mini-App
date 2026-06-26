@@ -50,7 +50,7 @@ export function ProfilePage() {
       <PageContent>
         <Group>
           <RichCell
-            before={<Avatar size={72} src={user.vk_avatar_url ?? user.avatar_url ?? undefined} />}
+            before={<Avatar size={72} src={user.avatar_url ?? undefined} />}
             subtitle={user.email ?? undefined}
             extraSubtitle={user.game_role_label ?? 'Роль не выбрана'}
           >

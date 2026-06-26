@@ -11,5 +11,12 @@ export type {
   VerifyEmailResponse,
   ResendCodeRequest,
 } from './model/types';
+export {
+  loginRegisterRequestSchema,
+  loginRegisterResponseSchema,
+  verifyEmailRequestSchema,
+  verifyEmailResponseSchema,
+  resendCodeRequestSchema,
+} from './model/types';
 export { AuthCtx, useAuth, type AuthContextValue, type AuthStatus } from './model/AuthContext';
 export { LoginForm } from './ui/LoginForm';

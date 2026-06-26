@@ -1,25 +1,32 @@
-export type AchievementCategory =
-  | 'registration'
-  | 'content_viewing'
-  | 'dev_diving'
-  | 'legacy'
-  | 'it_errors'
-  | 'it_security'
-  | 'general';
+import { z } from 'zod';
 
-export interface AchievementGroup {
-  key: string;
-  category: AchievementCategory;
-  name: string;
-  description: string;
-  progress: number;
-  target: number;
-  tiers_total: number;
-  tiers_completed: number;
-  all_completed: boolean;
-}
+export const achievementCategorySchema = z.enum([
+  'registration',
+  'content_viewing',
+  'dev_diving',
+  'legacy',
+  'it_errors',
+  'it_security',
+  'general',
+]);
 
-export interface Badge {
-  label: string;
-  achievement_name: string;
-}
+export const achievementGroupSchema = z.object({
+  key: z.string(),
+  category: achievementCategorySchema,
+  name: z.string(),
+  description: z.string(),
+  progress: z.number(),
+  target: z.number(),
+  tiers_total: z.number(),
+  tiers_completed: z.number(),
+  all_completed: z.boolean(),
+});
+
+export const badgeSchema = z.object({
+  label: z.string(),
+  achievement_name: z.string(),
+});
+
+export type AchievementCategory = z.infer<typeof achievementCategorySchema>;
+export type AchievementGroup = z.infer<typeof achievementGroupSchema>;
+export type Badge = z.infer<typeof badgeSchema>;

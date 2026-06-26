@@ -15,6 +15,9 @@ body {
   line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #root,
@@ -45,9 +48,6 @@ a:hover {
   text-decoration: var(--text-decoration-underline);
 }
 
-/* VKUI Cell/SimpleCell обрезают однострочный текст эллипсом (.vkuiSimpleCell__host
-   имеет white-space:nowrap). Geist шире системного → раньше влезало, теперь нет.
-   Включаем перенос на всю ширину, без эллипса. */
 .vkuiSimpleCell__host,
 .vkuiCell__host {
   white-space: normal;
@@ -74,7 +74,6 @@ a:hover {
   overflow: visible;
 }
 
-/* Footer / Headline / Subhead обычно ставят nowrap или ellipsis — отключаем. */
 [class*='vkuiFootnote'],
 [class*='vkuiSubhead'],
 [class*='vkuiHeadline'],
@@ -85,4 +84,10 @@ a:hover {
   white-space: normal;
   text-overflow: clip;
   overflow: visible;
+}
+
+.vkuiSimpleCell__host,
+.vkuiCell__host,
+.vkuiTappable__host {
+  touch-action: pan-y;
 }

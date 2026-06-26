@@ -17,8 +17,8 @@ html.theme-transitioning * {
   --color-quinary: rgb(0 0 0 / 20%);
   --color-background: rgb(7 7 7 / 100%);
   --color-background-overlay: rgb(23 23 23 / 90%);
-  --color-status-error: rgb(177 0 0 / 100%);
-  --color-status-success: rgb(255 255 255 / 100%);
+  --color-status-error: rgb(255 70 70 / 100%);
+  --color-status-success: rgb(120 220 130 / 100%);
   --color-notification: rgb(0 123 255 / 100%);
   --color-state-inactive: rgb(77 77 77 / 100%);
   --color-state-text-inactive: rgb(93 93 93 / 100%);

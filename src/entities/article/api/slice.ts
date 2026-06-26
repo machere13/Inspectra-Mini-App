@@ -1,12 +1,23 @@
+import { z } from 'zod';
 import { ENDPOINTS, baseApi, injectDynamicSegments } from '@shared/api';
-import type { ApiSuccess } from '@shared/model';
-import type { Article } from '../model/types';
+import { apiSuccessSchema } from '@shared/model';
+import { articleSchema, type Article } from '../model/types';
 
-type ArticlesPayload = { articles: Article[] } | Article[];
-type ArticlePayload = { article: Article } | Article;
+const articlesListPayloadSchema = z.union([
+  z.object({ articles: z.array(articleSchema) }),
+  z.array(articleSchema),
+]);
 
-const unwrapList = (p: ArticlesPayload): Article[] => (Array.isArray(p) ? p : p.articles);
-const unwrapOne = (p: ArticlePayload): Article => ('article' in p ? p.article : p);
+const articlePayloadSchema = z.union([z.object({ article: articleSchema }), articleSchema]);
+
+const articlesResponseSchema = apiSuccessSchema(articlesListPayloadSchema);
+const articleResponseSchema = apiSuccessSchema(articlePayloadSchema);
+
+const unwrapList = (p: z.infer<typeof articlesListPayloadSchema>): Article[] =>
+  Array.isArray(p) ? p : p.articles;
+
+const unwrapOne = (p: z.infer<typeof articlePayloadSchema>): Article =>
+  'article' in p ? p.article : p;
 
 export const articleApi = baseApi.injectEndpoints({
   endpoints: build => ({
@@ -15,7 +26,7 @@ export const articleApi = baseApi.injectEndpoints({
         url: injectDynamicSegments(ENDPOINTS.weekArticles, { weekId }),
         method: 'GET',
       }),
-      transformResponse: (res: ApiSuccess<ArticlesPayload>) => unwrapList(res.data),
+      transformResponse: (res: unknown) => unwrapList(articlesResponseSchema.parse(res).data),
       providesTags: (_r, _e, weekId) => [{ type: 'Articles', id: weekId }],
     }),
     getArticle: build.query<Article, { weekId: number | string; id: number | string }>({
@@ -23,7 +34,7 @@ export const articleApi = baseApi.injectEndpoints({
         url: injectDynamicSegments(ENDPOINTS.article, { weekId, id }),
         method: 'GET',
       }),
-      transformResponse: (res: ApiSuccess<ArticlePayload>) => unwrapOne(res.data),
+      transformResponse: (res: unknown) => unwrapOne(articleResponseSchema.parse(res).data),
       providesTags: (_r, _e, { weekId, id }) => [{ type: 'Articles', id: `${weekId}/${id}` }],
     }),
   }),

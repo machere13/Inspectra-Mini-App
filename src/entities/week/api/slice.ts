@@ -1,18 +1,28 @@
+import { z } from 'zod';
 import { ENDPOINTS, baseApi, injectDynamicSegments } from '@shared/api';
-import type { ApiSuccess } from '@shared/model';
-import type { Week } from '../model/types';
+import { apiSuccessSchema } from '@shared/model';
+import { weekSchema, type Week } from '../model/types';
 
-type WeeksPayload = { weeks: Week[] } | Week[];
-type WeekPayload = { week: Week } | Week;
+const weeksListPayloadSchema = z.union([
+  z.object({ weeks: z.array(weekSchema) }),
+  z.array(weekSchema),
+]);
 
-const unwrapWeeks = (p: WeeksPayload): Week[] => (Array.isArray(p) ? p : p.weeks);
-const unwrapWeek = (p: WeekPayload): Week => ('week' in p ? p.week : p);
+const weekPayloadSchema = z.union([z.object({ week: weekSchema }), weekSchema]);
+
+const weeksResponseSchema = apiSuccessSchema(weeksListPayloadSchema);
+const weekResponseSchema = apiSuccessSchema(weekPayloadSchema);
+
+const unwrapWeeks = (p: z.infer<typeof weeksListPayloadSchema>): Week[] =>
+  Array.isArray(p) ? p : p.weeks;
+
+const unwrapWeek = (p: z.infer<typeof weekPayloadSchema>): Week => ('week' in p ? p.week : p);
 
 export const weekApi = baseApi.injectEndpoints({
   endpoints: build => ({
     getWeeks: build.query<Week[], void>({
       query: () => ({ url: ENDPOINTS.weeks, method: 'GET' }),
-      transformResponse: (res: ApiSuccess<WeeksPayload>) => unwrapWeeks(res.data),
+      transformResponse: (res: unknown) => unwrapWeeks(weeksResponseSchema.parse(res).data),
       providesTags: result =>
         result
           ? [
@@ -26,7 +36,7 @@ export const weekApi = baseApi.injectEndpoints({
         url: injectDynamicSegments(ENDPOINTS.week, { id }),
         method: 'GET',
       }),
-      transformResponse: (res: ApiSuccess<WeekPayload>) => unwrapWeek(res.data),
+      transformResponse: (res: unknown) => unwrapWeek(weekResponseSchema.parse(res).data),
       providesTags: (_r, _e, id) => [{ type: 'Weeks', id }],
     }),
   }),
